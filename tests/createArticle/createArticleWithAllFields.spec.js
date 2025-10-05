@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { SignUpPage } from '../../src/pages/SignUpPage';
 import { HomePage } from '../../src/pages/HomePage';
 import { CreateArticlePage } from '../../src/pages/CreateArticlePage';
@@ -17,31 +17,56 @@ test.beforeEach(async ({ page }) => {
     password: faker.internet.password(),
   };
 
-  await signUpPage.open();
-  await signUpPage.fillUsernameField(user.username);
-  await signUpPage.fillEmailField(user.email);
-  await signUpPage.fillPasswordField(user.password);
-  await signUpPage.clickSignUpButton();
-  await homePage.assertYourFeedTabIsVisible();
+  await test.step('Open Sign Up page', async () => {
+    await signUpPage.open();
+  });
+  await test.step('Fill Username', async () => {
+    await signUpPage.fillUsernameField(user.username);
+  });
+  await test.step('Fill Email', async () => {
+    await signUpPage.fillEmailField(user.email);
+  });
+  await test.step('Fill Password', async () => {
+    await signUpPage.fillPasswordField(user.password);
+  });
+  await test.step('Click Sign Up button', async () => {
+    await signUpPage.clickSignUpButton();
+  });
+  await test.step('Assert Your Feed tab is visible', async () => {
+    await homePage.assertYourFeedTabIsVisible();
+  });
+  await test.step('Navigate to New Article page', async () => {
+    await homePage.clickNewArticleLink();
+  });
 });
 
-test('Create an article with all fields', async () => {
+test('Create an article with required and optional fields', async () => {
   const article = {
     title: faker.lorem.sentence(),
     description: faker.lorem.sentence(),
     body: faker.lorem.paragraph(),
-    tags: ['playwright','test'],
+    tags: ['playwright', 'test'],
   };
 
-  await homePage.clickNewArticleLink();
-  await createArticlePage.fillTitleField(article.title);
-  await createArticlePage.fillDescriptionField(article.description);
-  await createArticlePage.fillBodyField(article.body);
-
+  await test.step('Fill Article Title', async () => {
+    await createArticlePage.fillTitleField(article.title);
+  });
+  await test.step('Fill Description', async () => {
+    await createArticlePage.fillDescriptionField(article.description);
+  });
+  await test.step('Fill Body', async () => {
+    await createArticlePage.fillBodyField(article.body);
+  });
   for (const tag of article.tags) {
-    await createArticlePage.addTag(tag);
+    await test.step(`Add Tag '${tag}'`, async () => {
+      await createArticlePage.addTag(tag);
+    });
   }
-
-  await createArticlePage.submit();
-  await createArticlePage.expectSuccess(article.title);
+  await test.step('Click Publish Article', async () => {
+    await createArticlePage.submit();
+  });
+  await test.step('Verify article was created successfully', async () => {
+    await expect(createArticlePage.articleTitleHeader).toHaveText(article.title);
+    await expect(createArticlePage.page).toHaveURL(/\/article\/.+/);
+  });
 });
