@@ -16,26 +16,26 @@ export class SignInPage {
   }
 
   async fillEmailField(email) {
-    await test.step(`Fill the 'Email' field`, async () => {
+    await test.step(`Fill 'Email' field`, async () => {
       await this.emailField.fill(email);
     });
   }
 
   async fillPasswordField(password) {
-    await test.step(`Fill the 'Password' field`, async () => {
+    await test.step(`Fill 'Password' field`, async () => {
       await this.passwordField.fill(password);
     });
   }
 
   async clickSignInButton() {
-    await test.step(`Click the 'Sign in' button`, async () => {
+    await test.step(`Click 'Sign in' button`, async () => {
       await this.signInButton.click();
     });
   }
 
-  async assertErrorMessageContainsText(messageText) {
-    await test.step(`Assert the '${messageText}' error is shown`, async () => {
-      await expect(this.errorMessage).toContainText(messageText);
+  async expectValidationError(text) {
+    await test.step(`Expect validation error '${text}'`, async () => {
+      await expect(this.errorMessage).toContainText(text);
     });
   }
 }

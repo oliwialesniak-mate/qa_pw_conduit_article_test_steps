@@ -17,32 +17,32 @@ export class SignUpPage {
   }
 
   async fillUsernameField(username) {
-    await test.step(`Fill the 'Username' field`, async () => {
+    await test.step(`Fill 'Username' field`, async () => {
       await this.usernameField.fill(username);
     });
   }
 
   async fillEmailField(email) {
-    await test.step(`Fill the 'Email' field`, async () => {
+    await test.step(`Fill 'Email' field`, async () => {
       await this.emailField.fill(email);
     });
   }
 
   async fillPasswordField(password) {
-    await test.step(`Fill the 'Password' field`, async () => {
+    await test.step(`Fill 'Password' field`, async () => {
       await this.passwordField.fill(password);
     });
   }
 
   async clickSignUpButton() {
-    await test.step(`Click the 'Sign up' button`, async () => {
+    await test.step(`Click 'Sign up' button`, async () => {
       await this.signUpButton.click();
     });
   }
 
-  async assertErrorMessageContainsText(messageText) {
-    await test.step(`Assert the '${messageText}' error is shown`, async () => {
-      await expect(this.errorMessage).toContainText(messageText);
+  async expectValidationError(text) {
+    await test.step(`Expect validation error '${text}'`, async () => {
+      await expect(this.errorMessage).toContainText(text);
     });
   }
 }

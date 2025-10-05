@@ -25,9 +25,21 @@ test.beforeEach(async ({ page }) => {
   await homePage.assertYourFeedTabIsVisible();
 });
 
-test('Create an article without required fields', async () => {
-  await homePage.clickNewArticleLink();
-  await createArticlePage.submit();
-  await createArticlePage.expectValidationError("0:Article title cannot be empty");
-});
+test('Create an article without body', async () => {
+  const article = {
+    title: faker.lorem.sentence(),
+    description: faker.lorem.sentence(),
+    tags: ['playwright', 'test'],
+  };
 
+  await homePage.clickNewArticleLink();
+  await createArticlePage.fillTitleField(article.title);
+  await createArticlePage.fillDescriptionField(article.description);
+
+  for (const tag of article.tags) {
+    await createArticlePage.addTag(tag);
+  }
+
+  await createArticlePage.submit();
+  await createArticlePage.expectValidationError("0:Article body cannot be empty");
+});

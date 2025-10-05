@@ -8,13 +8,13 @@ export class HomePage {
   }
 
   async clickNewArticleLink() {
-    await test.step(`Click the 'New Article' link`, async () => {
+    await test.step(`Click 'New Article' link`, async () => {
       await this.newArticleLink.click();
     });
   }
 
   async assertYourFeedTabIsVisible() {
-    await test.step(`Assert the 'Your Feed' tab is visible`, async () => {
+    await test.step(`Assert 'Your Feed' tab is visible`, async () => {
       await expect(this.yourFeedTab).toBeVisible();
     });
   }
